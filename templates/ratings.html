@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load countries %}
+{% block content %}
+<div id="main">
+    <div class="container">
+
+
+
+
+
+        <h1>Оценки</h1>
+        {% if messages %}
+        <span class="help">
+            {% for message in messages %}
+              <p>{{ message }}</p>
+            {% endfor %}
+        </span> 
+      {% endif %}
+        <table id="history_table">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th style="text-align: center;">Оценка</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rating in object_list %}
+                <tr>
+                    <td>
+                        <a href="#"
+                            title="{{rating.movie.title}}" class="link">
+                        {{rating.movie.title}}</a> ({{rating.movie.year}})<br>
+                        <span class="date rating_date">{{rating.created_at}}</span>
+                    </td>
+                    <td style="text-align: center;">
+                        {{rating.value}}<br>
+                        <a href="{% url 'users:delete_rating' rating.id %}" class="muted remove" data-id="229853">Удалить</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <p>Здесь будут показываться ваши оценки к фильмам и сериалам</p>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <br>
+
+
+
+
+
+    </div>
+</div>
+{% endblock %}

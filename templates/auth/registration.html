@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+      <div id="main">
+        <div class="container">
+
+          <div id="login_page">
+            <h1>Регистрация</h1>
+
+            <form
+              action="#"
+              method="post"
+              role="form"
+            >
+            {% csrf_token %}
+            {{form}}
+              <input
+                type="email"
+                class="input w100"
+                name="email"
+                id="email"
+                maxlength="50"
+                value=""
+                placeholder="Электронная почта"
+                requeired
+              />
+              <input
+                type="input"
+                class="input w100"
+                name="name"
+                id="name"
+                maxlength="50"
+                value=""
+                placeholder="Ваше имя"
+                requeired
+              />
+              <input
+                type="password"
+                class="input w100"
+                name="password"
+                id="password"
+                maxlength="100"
+                placeholder="Пароль"
+                requeired
+              />
+              <input
+                type="password"
+                class="input w100"
+                name="password_confirmation"
+                id="password_confirmation"
+                maxlength="100"
+                placeholder="Подтвердите пароль"
+                requeired
+              />
+
+              <center>
+                <div
+                  class="g-recaptcha"
+                  data-sitekey="6Ld5MCUTAAAAALXvmUFVUdqxSgy9a8Kf3zeVvGEJ"
+                  data-theme="dark"
+                ></div>
+              </center>
+
+              <button class="btn radius big w100" type="submit">
+                Зарегистрироваться
+              </button>
+            </form>
+
+            <div class="links">
+              <p><a href="{% url 'users:login' %}">Войти</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+{% endblock  %}

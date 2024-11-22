@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+      <div id="main">
+        <div class="container">
+
+          <div id="login_page">
+            <h1>Вход</h1>
+     
+            <br>
+
+            <form
+            id="my_login_form"
+              action="#"
+              method="post"
+              role="form"
+            >
+            {% csrf_token %}
+            {{form}}
+              
+              <button class="btn radius big w100" type="submit">
+                Войти
+              </button>
+            </form>
+
+            <div class="links">
+              <p><a href="{% url 'users:register' %}">Зарегистрироваться</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <script>
+    let form = document.querySelector("#my_login_form")
+    for(let el of form.elements){
+        if(el.tagName == "INPUT"){
+            el.classList.add("input")
+            el.classList.add("w100")
+        }
+    }
+</script>
+{% endblock  %}

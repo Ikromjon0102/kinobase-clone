@@ -1,0 +1,302 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+        <div id="main">
+            <div class="container">
+
+
+
+
+                <div id="filters_row" class="row">
+                    <div class="left">
+                        <h1>{{category.name}}</h1>
+                    </div>
+                    <div class="right" id="filters">
+                        <div class="dropdown">
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                                <svg height="18" width="18" class="icon" viewBox="0 0 24 24">
+                                    <path fill="currentColor" fill-rule="evenodd"
+                                        d="M8 7.1a1.35 1.35 0 1 0 0-2.7 1.35 1.35 0 0 0 0 2.7Zm0 1.4c1.259 0 2.32-.846 2.646-2H21.25a.75.75 0 0 0 0-1.5H10.646a2.751 2.751 0 0 0-5.292 0H2.75a.75.75 0 0 0 0 1.5h2.604A2.751 2.751 0 0 0 8 8.5Zm8 4.85a1.35 1.35 0 1 0 0-2.7 1.35 1.35 0 0 0 0 2.7Zm2.646-.6a2.751 2.751 0 0 1-5.293 0H2.75a.75.75 0 0 1 0-1.5h10.604a2.751 2.751 0 0 1 5.293 0h2.603a.75.75 0 0 1 0 1.5h-2.604Zm-9.296 5.5a1.35 1.35 0 1 1-2.7 0 1.35 1.35 0 0 1 2.7 0Zm1.296.75a2.751 2.751 0 0 1-5.292 0H2.75a.75.75 0 0 1 0-1.5h2.604a2.751 2.751 0 0 1 5.292 0H21.25a.75.75 0 0 1 0 1.5H10.646Z"
+                                        clip-rule="evenodd" />
+                                </svg> <span>Фильтры</span>
+                            </a>
+
+                            <div id="filter" class="dropdown-menu dropdown-menu-right">
+                                <ul id="filter_main">
+                                    <li><a href="#" onclick="dropdown_filter('genres', true);return false;"><span
+                                                class="left">Жанр</span> <span class="right"><span
+                                                    class="next"></span></span></a></li>
+                                    <li><a href="#" onclick="dropdown_filter('countries', true);return false;"><span
+                                                class="left">Страна</span> <span class="right"><span
+                                                    class="next"></span></span></a></li>
+                                    <li><a href="#" onclick="dropdown_filter('years', true);return false;"><span
+                                                class="left">Год</span> <span class="right"><span
+                                                    class="next"></span></span></a></li>
+                                    <li><a href="#" onclick="dropdown_filter('video', true);return false;"><span
+                                                class="left">Качество</span> <span class="right"><span
+                                                    class="next"></span></span></a></li>
+                                    <li><a href="#" onclick="dropdown_filter('audio', true);return false;"><span
+                                                class="left">Перевод</span> <span class="right"><span
+                                                    class="next"></span></span></a></li>
+                                </ul>
+
+                                <div id="filter_genres" class="hide">
+                                    <ul>
+                                        <li><a href="#" class="title-options"
+                                                onclick="dropdown_filter('genres', false);return false;"><span
+                                                    class="prev"></span> Жанр</a></li>
+                                        <li role="separator" class="divider"></li>
+                                    </ul>
+                                    <ul id="genres" class="options">
+                                        {% for genre in genres %}
+                                        <li><a href="{% url 'movie:movie_filter' 'genre' genre.slug  %}">
+                                            {{ genre.name }}
+                                        </a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+
+                                <div id="filter_countries" class="hide">
+                                    <ul>
+                                        <li><a href="#" class="title-options"
+                                                onclick="dropdown_filter('countries', false);return false;"><span
+                                                    class="prev"></span> Страна</a></li>
+                                        <li role="separator" class="divider"></li>
+                                    </ul>
+                                    <ul id="countries" class="options">
+                                        {% for c in movie_countries %}
+                                        <li><a href="{% url 'movie:movie_filter' 'country' c.code  %}">
+                                            {{c.name}}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+
+                                <div id="filter_years" class="hide">
+                                    <ul>
+                                        <li><a href="#" class="title-options"
+                                                onclick="dropdown_filter('years', false);return false;"><span
+                                                    class="prev"></span> Год</a></li>
+                                        <li role="separator" class="divider"></li>
+                                    </ul>
+                                    <ul id="years" class="options">
+                                        {% for year in movie_years %}
+                                        <li>
+                                            <a href="{% url 'movie:movie_filter' 'year' year  %}">
+                                            {{year}}</a>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+
+                                <div id="filter_video" class="hide">
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="title-options"
+                                                onclick="dropdown_filter('video', false);return false;"><span
+                                                    class="prev"></span> Качество</a>
+                                                </li>
+                                        <li role="separator" class="divider"></li>
+                                    </ul>
+                                    <ul id="video" class="options">
+                                        {% for q in qualities %}
+                                        <li>
+                                            <a href="{% url 'movie:movie_filter' 'quality' q  %}">
+                                                {{q}}
+                                            </a>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+
+
+                                <div class="buttons">
+                                    <center>
+                                        <button class="btn" id="clear_filters">Сбросить</button>
+                                        <button class="btn" id="submit_filters">Применить</button>
+                                    </center>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="dropdown">
+                            <a class="dropdown-toggle sort" href="#" data-toggle="dropdown">
+                                <svg height="18" width="18" class="icon" viewBox="0 0 24 24">
+                                    <path fill="currentColor"
+                                        d="M8 17H4a1 1 0 0 0 0 2h4a1 1 0 0 0 0-2ZM14 11H4a1 1 0 0 0 0 2h10a1 1 0 0 0 0-2ZM20 5H4a1 1 0 0 0 0 2h16a1 1 0 1 0 0-2Z" />
+                                </svg> <span>Сортировать</span>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li class="active">
+                                    <a href="{% url 'movie:movie_sort' 'new' %}" rel="nofollow">
+                                        Новинки
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'movie:movie_sort' 'year' %}" rel="nofollow">
+                                        Год
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'movie:movie_sort' 'day' %}" rel="nofollow">
+                                        Популярные за сутки
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'movie:movie_sort' 'week' %}" rel="nofollow">
+                                        Популярные за неделю
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'movie:movie_sort' 'month' %}" rel="nofollow">
+                                        Популярные за месяц
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'movie:movie_sort' 'alltime' %}" rel="nofollow">
+                                        Популярные за все время
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'movie:movie_sort' 'users_rating' %}" rel="nofollow">
+                                        Рейтинг пользователей
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'movie:movie_sort' 'kp_rating' %}" rel="nofollow">
+                                        Рейтинг Кинопоиск
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'movie:movie_sort' 'imdb_rating' %}" rel="nofollow">
+                                        Рейтинг IMDb
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+                <ul class="items with_spacer">
+                    {% for movie in object_list %}
+                    <li class="item">
+                        <div class="poster">
+                        <a href="{% url 'movie:movie_detail' movie.slug %}"
+                            ><img
+                            src="{{movie.cover.url}}"
+                            class="img-responsive"
+                            loading="lazy"
+                            alt="{{movie.title}}"
+                            title="{{movie.title}}"
+                            width="242"
+                            height="358" /></a
+                        ><button
+                            class="favorite"
+                            data-movie-id="223525"
+                            title="Добавить в избранное"
+                        ></button>
+                        </div>
+                        <div class="title">
+                        <a
+                            href="{% url 'movie:movie_detail' movie.slug %}"
+                            alt="{{movie.title}}"
+                            title="{{movie.title}}"
+                            >{{movie.title}}</a
+                        >
+                        </div>
+                        <span class="rating">{{movie.get_average_rating}}</span
+                        ><span class="year">{{movie.year}}, {{movie.quality}}</span>
+                    </li>
+                  {% endfor %}
+                </ul>
+                <center>
+                    <div id="pg_full">
+                        <ul class="pagination">
+                            {% if page_obj.has_previous %}
+                            <li>
+                                <a href="?page={{ page_obj.previous_page_number }}">
+                                    Предыдущая
+                                </a>
+                                </li>
+                            {% endif %}
+                 
+                            {% for p in page_obj.paginator.page_range|slice:"10" %}
+                                
+                                {% if p == page_obj.number %}
+                                <li class="active">
+                                    <a href="?page={{ p }}">{{ p }}</a>
+                                </li>
+                                {% else %}
+                                <li>
+                                    <a href="?page={{ p }}">{{ p }}</a>
+                                </li>
+                                {% endif %}
+                                
+                            {% endfor %}
+                            
+                            {% if page_obj.has_next %}
+                                <li>
+                                    <a href="?page={{ page_obj.next_page_number }}" class="next">
+                                        Следующая
+                                    </a>
+                                </li>
+                                <li>
+                                 <a href="?page={{ page_obj.paginator.num_pages }}">
+                                    {{ page_obj.paginator.num_pages }}
+                                </a> 
+                                </li>
+                              
+                            {% endif %}
+                        </ul>
+                    </div>
+                </center>
+                <center>
+                    <div id="pg_small">
+                        <ul class="pagination">
+                            {% if page_obj.has_previous %}
+                            <li>
+                                <a href="?page={{ page_obj.previous_page_number }}">
+                                    Предыдущая
+                                </a>
+                                </li>
+                            {% endif %}
+                            <li>
+                                <select action="{{ request.path }}?" method="get">
+                                    <option value="1" selected="selected">
+                                        1 / {{ page_obj.paginator.num_pages }}
+                                    </option>
+                                    {% for p in page_obj.paginator.page_range|slice:"10" %}
+                                
+                                    <option value="{{ p }}">{{ p }}</option>
+
+                                    {% endfor %}
+
+                                    <option value="{{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</option>
+                                </select>
+                            </li>
+                            {% if page_obj.has_next %}
+                            <li>
+                                <a href="?page={{ page_obj.next_page_number }}" class="next">
+                                    Следующая
+                                </a>
+                            </li>
+                            <li>
+                             <a href="?page={{ page_obj.paginator.num_pages }}">
+                                {{ page_obj.paginator.num_pages }}
+                            </a> 
+                            </li>
+                          
+                        {% endif %}
+                        </ul>
+                </center>
+
+
+           
+
+
+
+            </div>
+        </div>
+{% endblock %}

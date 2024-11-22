@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+      <div id="main">
+        <div class="container">
+          <div id="profile">
+            <h1>Профиль</h1>
+
+            <form action="" name="profile" method="post" enctype="multipart/form-data">
+              {% if messages %}
+              <span class="help">
+                  {% for message in messages %}
+                    {{ message }}
+                  {% endfor %}
+              </span> 
+            {% endif %}
+                {% csrf_token %}
+              <div id="avatar_preview">
+                <img
+                {% if request.user.profile.image %}
+                  src="{{ request.user.profile.image.url }}"
+                  {% else %}
+                    src="image/avatar.svg"
+                  {% endif %}
+                  
+                  width="100"
+                  height="100"
+                  class="img_circle"
+                />
+              </div>
+
+   
+              <div class="form-group">
+                <input type="file" name="avatar_file" />
+              </div>
+
+              <div class="form-group">
+                <label for="email">Электронная почта</label>
+                <input
+                  type="email"
+                  class="input"
+                  id="email"
+                  name="email"
+                  value="{{request.user.email}}"
+                  placeholder="Электронная почта"
+                />
+         
+           
+              </div>
+
+              <div class="form-group">
+                <label for="name">Ваше имя</label>
+                <input
+                  type="text"
+                  class="input"
+                  id="name"
+                  name="name"
+                  value="{{request.user.first_name}}"
+                  placeholder="Ваше имя"
+                />
+                <span class="help"
+                  >Имя, которое будет показываться в комментариях</span
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="password">Новый пароль (не обязательно)</label>
+                <input
+                  type="password"
+                  class="input"
+                  name="password"
+                  id="password"
+                  placeholder="Новый пароль"
+                />
+                <span class="help"
+                  >Если пароль менять не нужно &mdash; оставьте поле
+                  пустым</span
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="password_confirmation"
+                  >Повторите пароль (не обязательно)</label
+                >
+                <input
+                  type="password"
+                  class="input"
+                  name="password_confirmation"
+                  id="password_confirmation"
+                  placeholder="Повторите пароль"
+                />
+                <span class="help"
+                  >Если пароль менять не нужно &mdash; оставьте поле
+                  пустым</span
+                >
+              </div>
+
+              <input type="hidden" id="new_avatar" name="new_avatar" value="" />
+
+              <button type="submit" class="btn">Сохранить</button>
+            </form>
+          </div>
+
+          <script type="text/javascript">
+            var FileAPI = {
+              html5: true,
+              debug: false,
+              media: false,
+              staticPath: "https://st.kinobase.org/static/FileAPI/",
+            };
+          </script>
+
+          <script
+            src="https://st.kinobase.org/static/FileAPI/FileAPI.html5.min.js"
+            defer
+          ></script>
+          <script
+            src="https://st.kinobase.org/static/FileAPI/FileAPI.exif.js"
+            defer
+          ></script>
+          <script
+            src="https://st.kinobase.org/static/FileAPI/jquery.fileapi.js"
+            defer
+          ></script>
+
+          <script type="text/javascript">
+            window.addEventListener("DOMContentLoaded", function () {
+              $("#upload_avatar").fileapi({
+                url: "/upload_avatar",
+                multiple: false,
+                paramName: "avatar_file",
+                dataType: "json",
+                maxSize: 10 * FileAPI.MB,
+                accept: "image/*",
+                autoUpload: true,
+                imageSize: {
+                  minWidth: 100,
+                  minHeight: 100,
+                  maxWidth: 5000,
+                  maxHeight: 5000,
+                },
+                onSelect: function (evt, data) {
+                  if (data.other.length) {
+                    var errors = data.other[0].errors;
+                    if (errors) {
+                      if (errors.minWidth || errors.minHeight) {
+                        alert(
+                          "Высота и ширина картинки должна быть как минимум 100x100"
+                        );
+                      }
+                      if (errors.maxWidth || errors.maxHeight) {
+                        alert(
+                          "Высота и ширина картинки не должна превышать 5000x5000"
+                        );
+                      }
+                    }
+                  }
+                },
+                onFileComplete: function (evt, uiEvt) {
+                  var data = uiEvt.result;
+                  if (data.error !== undefined) {
+                    alert(data.error);
+                  } else {
+                    var min = 10;
+                    var max = 20;
+                    var random =
+                      Math.floor(Math.random() * (max - min + 1)) + min;
+                    var avatar_img =
+                      "https://st.kinobase.org/static/tmp/" +
+                      data.avatar +
+                      "?rnd=" +
+                      random;
+                    $("#avatar_preview img").attr("src", avatar_img);
+                    $("#new_avatar").val(data.avatar);
+                  }
+                },
+                filterFn: function (file, info) {
+                  if (/^image/.test(file.type)) {
+                    return info.width >= 100 && info.height >= 100;
+                  }
+                  return false;
+                },
+                elements: {
+                  active: { show: ".js-upload", hide: ".js-browse" },
+                },
+              });
+            });
+          </script>
+        </div>
+      </div>
+
+      {% endblock  %}

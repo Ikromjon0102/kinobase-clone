@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+      <div id="main">
+        <div class="container">
+          <div id="index_page">
+            <h2><a href="/">Фильмы</a></h2>
+
+            <ul class="items">
+                {% for movie in object_list %}
+                <li class="item">
+                    <div class="poster">
+                    <a href="{% url 'movie:movie_detail' movie.slug %}"
+                        ><img
+                        src="{{movie.cover.url}}"
+                        class="img-responsive"
+                        loading="lazy"
+                        alt="{{movie.title}}"
+                        title="{{movie.title}}"
+                        width="242"
+                        height="358" /></a
+                    >
+                    <a
+                        class="{% if movie in request.user.profile.favorites.all %}favorite is_favorited{% else %}favorite{% endif %}"
+                        href="{% url 'users:add_to_favorites' movie.id %}"
+                        title="Добавить в избранное"
+                    ></a>
+                    </div>
+                    <div class="title">
+                    <a
+                        href="{% url 'movie:movie_detail' movie.slug %}"
+                        alt="{{movie.title}}"
+                        title="{{movie.title}}"
+                        >{{movie.title}}</a
+                    >
+                    </div>
+                    <span class="rating">{{movie.get_average_rating}}</span
+                    ><span class="year">{{movie.year}}, {{movie.quality}}</span>
+                </li>
+              {% endfor %}
+            </ul>
+
+          </div>
+        </div>
+      </div>
+{% endblock %}
+    
